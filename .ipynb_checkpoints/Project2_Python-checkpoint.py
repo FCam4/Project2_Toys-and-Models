@@ -60,7 +60,8 @@ group by p.productname
 order by sumOrdered desc
 limit 5'''
 
-df_logistics=pd.read_sql(query_logistics, con=connection)
+df_logistics = pd.read_sql(query_logistics, con=connection)
+df_logistics.head(5)
 
 query_hr= '''WITH top_sellers AS (select e.employeeNumber, e.firstname, jobTitle, e.lastname, DATE_FORMAT(o.orderdate, "%c %Y") as DateOrd, year(o.orderdate) as YearOrd, sum(od.quantityordered*od.priceeach) as highest_turnover,
 RANK() OVER (PARTITION BY DateOrd ORDER BY highest_turnover DESC) sell_rank from employees e
@@ -80,8 +81,6 @@ print(df_hr)
 
 
 
-
-
 add_selectbox = st.sidebar.radio(
     "Topics",
     ("Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
@@ -98,14 +97,6 @@ elif add_selectbox == 'Finance_orders':
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
     st.dataframe(df_logistics)
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar(df_logistics["productname"], df_logistics["quantityinstock"])
-    ax.set_title('Qty in stock x product')
-    ax.set_ylabel('Qty in stock (nº)')
-    ax.set_xlabel('Product')
-    fig.autofmt_xdate()
-    st.pyplot()
-    st.set_option('deprecation.showPyplotGlobalUse', False)
 else: 
     st.markdown('''Each month, the 2 sellers with the highest turnover:''')
     st.dataframe(df_hr)
