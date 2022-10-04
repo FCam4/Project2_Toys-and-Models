@@ -74,9 +74,9 @@ select * from top_sellers
 where sell_rank=1 or sell_rank=2;'''
 
 df_hr = pd.read_sql(query_hr, con=connection)
-df_hr.head(53)
+#df_hr.head(53)
 df_hr = df_hr[df_hr['YearOrd'] == 2021]
-print(df_hr)
+#print(df_hr)
 
 
 
@@ -92,15 +92,6 @@ if add_selectbox=='Sales':
 elif add_selectbox == 'Finance_turnover':
     st.markdown('''The turnover of the orders of the last two months by country:''')
     st.dataframe(df_finances_to)
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar(df_finances_to["country"], df_finances_to["turnover"], df_finances_to.sort_values('turnover',ascending = False).country, color="blue")
-    ax.set_title('The turnover of orders')
-    ax.set_ylabel('Orders')
-    ax.set_xlabel('Country')
-    fig.autofmt_xdate()
-    st.pyplot(fig)
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.info('Information from last two months', icon=":símbolo_informações:")
 elif add_selectbox == 'Finance_orders':
     st.markdown('''Orders that have not yet been paid:''')
     st.dataframe(df_finances_o)
@@ -109,17 +100,17 @@ elif add_selectbox == 'Finance_orders':
     ax.set_title('$ orders not yet paid x customer')
     ax.set_xlabel("customernumber")
     ax.set_ylabel("difference")
-    st.pyplot(fig)  
+    st.pyplot(fig)   
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
     st.dataframe(df_logistics)
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar(df_logistics["productname"], df_logistics["quantityinstock"])
+    ax.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
     ax.set_title('Qty in stock x product')
     ax.set_ylabel('Qty in stock (nº)')
     ax.set_xlabel('Product')
     fig.autofmt_xdate()
-    st.pyplot()
+    st.pyplot(fig)
     st.set_option('deprecation.showPyplotGlobalUse', False)
 else: 
     st.markdown('''Each month, the 2 sellers with the highest turnover:''')
@@ -130,10 +121,3 @@ else:
 #axes.set_xlabel("Month")
 #axes.set_ylabel("# orders")
 #axes.legend(title="Year:")
-
-
-
-
-
-
-
