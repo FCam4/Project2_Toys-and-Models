@@ -125,7 +125,6 @@ elif add_selectbox == 'Finance_turnover':
     st.info('Information from last 2 months', icon="ℹ️")
 elif add_selectbox == 'Finance_orders':
     st.markdown('''Orders that have not yet been paid:''')
-    st.dataframe(df_finances_o)
     fig, ax = plt.subplots(figsize=(10, 4))
     ax = sns.barplot(x="customernumber", y="difference", data=df_finances_o, order=df_finances_o.sort_values('difference',ascending = False).customernumber, color='blue')
     ax.set_title('$ orders not yet paid x customer')
@@ -135,7 +134,7 @@ elif add_selectbox == 'Finance_orders':
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
     st.dataframe(df_logistics)
-    fig, ax1 = plt.subplots(figsize=(10, 4))
+    fig, ax1 = plt.subplots(figsize=(10, 5))
     ax1.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
     ax1.set_title('# stock x product')
     ax1.set_ylabel('Qty in stock (nº)')
@@ -147,24 +146,15 @@ elif add_selectbox == 'Logistics':
     ax2.set_yticks(range(0, 1600, 500))
     st.pyplot(fig)
     st.set_option('deprecation.showPyplotGlobalUse', False)
-
-
-#ax2 = ax1.twinx() 
-  
-#ax2.set_ylabel('Y2-axis', color = 'blue') 
-#ax2.plot(x, data_2, color = 'blue') 
-#ax2.tick_params(axis ='y', labelcolor = 'blue') 
-
-
-
 else: 
     st.markdown('''Each month, the 2 sellers with the highest turnover:''')
     st.dataframe(df_hr)
-    
-#fig,axes=np.random.normal(figsize=(12,8))
-#sales= sns.barplot(data=df_sales, x="order_month", y="order_quantity", hue="order_year", ci=None).set(title='# products by month')
-#axes.set_xlabel("Month")
-#axes.set_ylabel("# orders")
-#axes.legend(title="Year:")
+    fig, axes = plt.subplots(figsize=(20,8))
+    sns.barplot(data=df_hr, x="DateOrd", y="highest_turnover", hue="sell_rank", ci=None).set(title='Top 2 sellers with the highest turnover')
+    axes.set_xlabel("Month")
+    axes.set_ylabel("Turnover")
+    axes.legend(title="Sell Rank:")
+    st.pyplot()
+
 
 
