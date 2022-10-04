@@ -38,7 +38,7 @@ join orderdetails od on od.ordernumber=o.ordernumber
 join customers c on c.customernumber=o.customernumber
 WHERE orderdate >= DATE_FORMAT(CURDATE(), '%Y-%m-01') - INTERVAL 2 MONTH
 Group by country
-order by turnover''' 
+order by turnover desc''' 
 
 df_finances_to = pd.read_sql(query_finances_to, con=connection)
 df_finances_to.head(7)
@@ -79,16 +79,12 @@ df_hr = df_hr[df_hr['YearOrd'] == 2021]
 print(df_hr)
 
 
-
-
-
 add_selectbox = st.sidebar.radio(
     "Topics",
     ("Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
 
 if add_selectbox=='Sales':
     st.markdown ('''The number of products sold by category and by month, with comparison and rate of change compared to the same month of the previous year:''')
-    st.dataframe(df_sales)
     fig2, ax2 = plt.subplots(figsize=(12,8))
     sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None)
     ax2.set_xlabel("Month")
@@ -139,14 +135,28 @@ elif add_selectbox == 'Finance_orders':
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
     st.dataframe(df_logistics)
-    fig, ax = plt.subplots(figsize=(10, 4))
-    ax.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
-    ax.set_title('# stock x product')
-    ax.set_ylabel('Qty in stock (nº)')
-    ax.set_xlabel('Product')
+    fig, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
+    ax1.set_title('# stock x product')
+    ax1.set_ylabel('Qty in stock (nº)')
+    ax1.set_xlabel('Product')
     fig.autofmt_xdate()
-    st.pyplot()
+    ax2 = ax1.twinx()
+    ax2.set_ylabel('# orders')
+    ax2.plot(df_logistics["productname"], df_logistics["sumOrdered"], color = 'red')
+    ax2.set_yticks(range(0, 1600, 500))
+    st.pyplot(fig)
     st.set_option('deprecation.showPyplotGlobalUse', False)
+
+
+#ax2 = ax1.twinx() 
+  
+#ax2.set_ylabel('Y2-axis', color = 'blue') 
+#ax2.plot(x, data_2, color = 'blue') 
+#ax2.tick_params(axis ='y', labelcolor = 'blue') 
+
+
+
 else: 
     st.markdown('''Each month, the 2 sellers with the highest turnover:''')
     st.dataframe(df_hr)
@@ -156,10 +166,5 @@ else:
 #axes.set_xlabel("Month")
 #axes.set_ylabel("# orders")
 #axes.legend(title="Year:")
-
-
-
-
-
 
 
