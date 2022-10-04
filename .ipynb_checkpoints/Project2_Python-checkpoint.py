@@ -60,8 +60,7 @@ group by p.productname
 order by sumOrdered desc
 limit 5'''
 
-df_logistics = pd.read_sql(query_logistics, con=connection)
-df_logistics.head(5)
+df_logistics=pd.read_sql(query_logistics, con=connection)
 
 query_hr= '''WITH top_sellers AS (select e.employeeNumber, e.firstname, jobTitle, e.lastname, DATE_FORMAT(o.orderdate, "%c %Y") as DateOrd, year(o.orderdate) as YearOrd, sum(od.quantityordered*od.priceeach) as highest_turnover,
 RANK() OVER (PARTITION BY DateOrd ORDER BY highest_turnover DESC) sell_rank from employees e
@@ -81,6 +80,8 @@ print(df_hr)
 
 
 
+
+
 add_selectbox = st.sidebar.radio(
     "Topics",
     ("Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
@@ -88,15 +89,64 @@ add_selectbox = st.sidebar.radio(
 if add_selectbox=='Sales':
     st.markdown ('''The number of products sold by category and by month, with comparison and rate of change compared to the same month of the previous year:''')
     st.dataframe(df_sales)
+    fig2, ax2 = plt.subplots(figsize=(12,8))
+    sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None)
+    ax2.set_xlabel("Month")
+    ax2.set_ylabel("Rate of change (%)")
+    ax2.legend(title="Year: ")
+    ax2.set_title('Rate of change')
+    st.pyplot(fig2)
+    # Second Graphic
+    fig, ax = plt.subplots(figsize=(10, 4))
+    sns.barplot(data=df_sales, x="order_month", y="order_quantity", hue="order_year", ci=None)
+    #ax.bar(df_sales["order_month"], df_sales["order_quantity"])
+    ax.set_xlabel("Month")
+    ax.set_ylabel("# orders")
+    ax.legend(title="Year: ")
+    ax.set_title('# products by month')
+    #fig.autofmt_xdate()
+    st.pyplot(fig)
+    #st.set_option('deprecation.showPyplotGlobalUse', False)
+    #Third Graphic
+    fig3, ax3 = plt.subplots(figsize=(12,8))
+    sns.barplot(data=df_sales, x="productline", y="order_quantity", hue="order_year", ci=None)
+    ax3.set_xlabel("Categories")
+    ax3.set_ylabel("# orders")
+    ax3.legend(title="Year: ")
+    ax3.set_title('# products by category')
+    st.pyplot(fig3)
 elif add_selectbox == 'Finance_turnover':
     st.markdown('''The turnover of the orders of the last two months by country:''')
     st.dataframe(df_finances_to)
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.bar(df_finances_to["country"], df_finances_to["turnover"], color="blue")
+    ax.set_title('The turnover of orders')
+    ax.set_ylabel('Orders')
+    ax.set_xlabel('Country')
+    fig.autofmt_xdate()
+    st.pyplot()
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    st.info('Information from last 2 months', icon="ℹ️")
 elif add_selectbox == 'Finance_orders':
     st.markdown('''Orders that have not yet been paid:''')
     st.dataframe(df_finances_o)
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax = sns.barplot(x="customernumber", y="difference", data=df_finances_o, order=df_finances_o.sort_values('difference',ascending = False).customernumber, color='blue')
+    ax.set_title('$ orders not yet paid x customer')
+    ax.set_xlabel("customernumber")
+    ax.set_ylabel("difference")
+    st.pyplot(fig)  
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
     st.dataframe(df_logistics)
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
+    ax.set_title('# stock x product')
+    ax.set_ylabel('Qty in stock (nº)')
+    ax.set_xlabel('Product')
+    fig.autofmt_xdate()
+    st.pyplot()
+    st.set_option('deprecation.showPyplotGlobalUse', False)
 else: 
     st.markdown('''Each month, the 2 sellers with the highest turnover:''')
     st.dataframe(df_hr)
