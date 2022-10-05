@@ -115,7 +115,6 @@ elif add_selectbox=='Sales':
     st.pyplot(fig3)
 elif add_selectbox == 'Finance_turnover':
     st.markdown('''The turnover of the orders of the last two months by country:''')
-    st.dataframe(df_finances_to)
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df_finances_to["country"], df_finances_to["turnover"], color="blue")
     ax.set_title('The turnover of orders')
@@ -135,7 +134,6 @@ elif add_selectbox == 'Finance_orders':
     st.pyplot(fig)  
 elif add_selectbox == 'Logistics':
     st.markdown('''The stock of the 5 most ordered products:''')
-    st.dataframe(df_logistics)
     fig, ax1 = plt.subplots(figsize=(10, 5))
     ax1.bar(df_logistics["productname"], df_logistics["quantityinstock"], color='blue')
     ax1.set_title('# stock x product')
