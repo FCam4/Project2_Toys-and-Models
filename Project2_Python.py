@@ -81,9 +81,11 @@ print(df_hr)
 
 add_selectbox = st.sidebar.radio(
     "Topics",
-    ("Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
+    ("Project","Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
 
-if add_selectbox=='Sales':
+if add_selectbox=='Project':
+    st.markdown ('''''') 
+elif add_selectbox=='Sales':
     st.markdown ('''The number of products sold by category and by month, with comparison and rate of change compared to the same month of the previous year:''')
     fig2, ax2 = plt.subplots(figsize=(12,8))
     sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None)
