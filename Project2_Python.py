@@ -115,6 +115,7 @@ elif add_selectbox=='Sales':
     st.pyplot(fig3)
 elif add_selectbox == 'Finance_turnover':
     st.markdown('''The turnover of the orders of the last two months by country:''')
+    st.info('Information from last 2 months', icon="ℹ️")
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.bar(df_finances_to["country"], df_finances_to["turnover"], color="blue")
     ax.set_title('The turnover of orders')
@@ -123,7 +124,6 @@ elif add_selectbox == 'Finance_turnover':
     fig.autofmt_xdate()
     st.pyplot()
     st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.info('Information from last 2 months', icon="ℹ️")
 elif add_selectbox == 'Finance_orders':
     st.markdown('''Orders that have not yet been paid:''')
     fig, ax = plt.subplots(figsize=(10, 4))
