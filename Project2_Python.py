@@ -55,7 +55,7 @@ df_finances_o = pd.read_sql(query_finances_o, con=connection)
 df_finances_o.head(12)
 
 
-query_logistics= '''select p.productname, sum(od.quantityordered) as sumOrdered, p.quantityinstock from products p join orderdetails od on p.productcode=od.productCode
+query_logistics= '''select p.productname,p.productline, sum(od.quantityordered) as sumOrdered, p.quantityinstock from products p join orderdetails od on p.productcode=od.productCode
 group by p.productname
 order by sumOrdered desc
 limit 5'''
