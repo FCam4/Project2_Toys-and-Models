@@ -81,7 +81,7 @@ print(df_hr)
 
 add_selectbox = st.sidebar.radio(
     "Topics",
-    ("Project","Sales", "Finance_turnover","Finance_orders", "Logistics", "HR"))
+    ("Project","Sales", "Finance_turnover","Finance_orders", "Logistics", "HR","Advices"))
 
 if add_selectbox=='Project':
     st.markdown ('''''') 
