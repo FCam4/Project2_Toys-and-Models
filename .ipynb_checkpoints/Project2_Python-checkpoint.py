@@ -87,7 +87,8 @@ if add_selectbox=='Sales':
     st.title('''Sales''')
     st.subheader('''The rate of change compared to the same month of the previous year:''')
     fig2, ax2 = plt.subplots(figsize=(10,4))
-    sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None, color="grey")
+    colors=['grey', 'black']
+    sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None, palette=colors)
     ax2.set_xlabel("Month")
     ax2.set_ylabel("Rate of change (%)")
     ax2.legend(title="Year: ")
@@ -97,7 +98,8 @@ if add_selectbox=='Sales':
     #Second Graphic
     st.subheader('''The number of products sold by category:''')
     fig3, ax3 = plt.subplots(figsize=(10,4))
-    sns.barplot(data=df_sales, x="productline", y="order_quantity", hue="order_year", ci=None, color="grey")
+    colors=['grey', 'black', 'blue']
+    sns.barplot(data=df_sales, x="productline", y="order_quantity", hue="order_year", ci=None, palette=colors)
     ax3.set_xlabel("Categories")
     ax3.set_ylabel("# orders")
     ax3.legend(title="Year: ")
@@ -141,6 +143,7 @@ elif add_selectbox == 'Logistics':
     ax2.set_yticks(range(0, 1600, 500))
     st.pyplot(fig)
     st.set_option('deprecation.showPyplotGlobalUse', False)
+    st.dataframe(df_logistics)
 else:
     st.title('''HR''')
     st.subheader('''Each month, the 2 sellers with the highest turnover:''')
