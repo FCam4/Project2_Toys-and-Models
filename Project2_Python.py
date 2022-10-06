@@ -87,7 +87,7 @@ if add_selectbox=='Sales':
     st.title('''Sales''')
     st.subheader('''The rate of change compared to the same month of the previous year:''')
     fig2, ax2 = plt.subplots(figsize=(10,4))
-    colors=['grey', 'black']
+    colors=['grey', 'black', 'blue']
     sns.barplot(data=df_sales, x="order_month", y="ratechange", hue="order_year", ci=None, palette=colors)
     ax2.set_xlabel("Month")
     ax2.set_ylabel("Rate of change (%)")
